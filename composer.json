@@ -1,5 +1,5 @@
 {
-    "name": "saintberry/phantomjs-extension",
+    "name": "dennisdigital/phantomjs-extension",
     "description": "Adds a PhantomJs driver to Behat's Mink extension. This will automatically start and stop PhantomJs in your tests.",
     "license": "MIT",
     "authors": [
