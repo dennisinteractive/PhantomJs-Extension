@@ -5,6 +5,7 @@ namespace Behat\PhantomJsExtension\ServiceContainer\Driver;
 use Behat\MinkExtension\ServiceContainer\Driver\Selenium2Factory;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use WebDriver\ServiceFactory;
 
 class PhantomJsFactory extends Selenium2Factory
 {
@@ -28,8 +29,29 @@ class PhantomJsFactory extends Selenium2Factory
                 ->scalarNode('wd_host')->defaultValue('http://localhost:8643/wd/hub')->end()
                 ->scalarNode('wd_port')->defaultValue(8643)->end()
                 ->scalarNode('bin')->defaultValue('/usr/local/bin/phantomjs')->end()
+                ->append($this->getCurlNode())->end()
             ->end()
         ;
+    }
+
+    /**
+     * Get Curl node definition.
+     *
+     * @return ArrayNodeDefinition
+     */
+    protected function getCurlNode()
+    {
+      $node = new ArrayNodeDefinition('curl_options');
+
+      $node
+        ->addDefaultsIfNotSet()
+        ->normalizeKeys(false)
+        ->children()
+            ->scalarNode('CURLOPT_CONNECTTIMEOUT')->end()
+            ->scalarNode('CURLOPT_TIMEOUT')->end()
+        ->end();
+
+      return $node;
     }
 
     /**
@@ -63,6 +85,16 @@ class PhantomJsFactory extends Selenium2Factory
             $guessedCapabilities = array(
                 'tags' => array(php_uname('n'), 'PHP '.phpversion()),
             );
+        }
+
+        // Setup custom Curl service.
+        ServiceFactory::getInstance()->setServiceClass('service.curl', 'Behat\PhantomJsExtension\Service\CurlService');
+        $curl_service = ServiceFactory::getInstance()->getService('service.curl');
+        if (isset($config['curl_options']['CURLOPT_TIMEOUT'])) {
+          $curl_service->setTimeout($config['curl_options']['CURLOPT_TIMEOUT']);
+        }
+        if (isset($config['curl_options']['CURLOPT_CONNECTTIMEOUT'])) {
+          $curl_service->setConnectTimeout($config['curl_options']['CURLOPT_CONNECTTIMEOUT']);
         }
 
         return new Definition('Behat\PhantomJsExtension\Driver\PhantomJsDriver', array(

@@ -34,6 +34,9 @@ extensions:
 			bin: /usr/local/bin/phantomjs
 	        browser: firefox
 	        capabilities: ~
+	        curl_options:
+	            CURLOPT_CONNECTTIMEOUT: 60
+	            CURLOPT_TIMEOUT: 60
 ```
 To do
 ----------------------------------
