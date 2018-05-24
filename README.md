@@ -26,17 +26,17 @@ The PhantomJsDriver's options are an extension of Selenium2 driver. Default conf
 ```
 extensions:
   Behat\PhantomJsExtension: ~
-    Behat\MinkExtension:
-      javascript_session: phantomjs
-      phantomjs:
-        wd_host: http://localhost:8643/wd/hub
-        wd_port: 8643
-        bin: /usr/local/bin/phantomjs
-        curl_options:
-          CURLOPT_CONNECTTIMEOUT: 60
-          CURLOPT_TIMEOUT: 60
-        browser: firefox
-        capabilities: ~
+  Behat\MinkExtension:
+    javascript_session: phantomjs
+    phantomjs:
+      wd_host: http://localhost:8643/wd/hub
+      wd_port: 8643
+      bin: /usr/local/bin/phantomjs
+      curl_options:
+        CURLOPT_CONNECTTIMEOUT: 60
+        CURLOPT_TIMEOUT: 60
+      browser: firefox
+      capabilities: ~
 ```
 To do
 ----------------------------------
